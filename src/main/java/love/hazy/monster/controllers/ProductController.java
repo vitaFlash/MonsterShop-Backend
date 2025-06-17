@@ -1,39 +1,30 @@
 package love.hazy.monster.controllers;
 
-import love.hazy.monster.models.Product;
+import love.hazy.monster.dtos.product.ProductDto;
 import love.hazy.monster.services.ProductService;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-    @Autowired
-    private ProductService service;
+    private final ProductService service;
+    public ProductController(ProductService service) { this.service = service; }
 
     @GetMapping
-    public List<Product> all() {
-        return service.getAll();
-    }
+    public List<ProductDto> all() { return service.getAll(); }
 
     @GetMapping("/{id}")
-    public Product one(@PathVariable Long id) {
-        return service.getById(id);
-    }
+    public ProductDto one(@PathVariable Long id) { return service.getById(id); }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return service.save(product);
-    }
+    public ProductDto create(@RequestBody ProductDto dto) { return service.save(dto); }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return service.update(id, product);
+    public ProductDto update(@PathVariable Long id, @RequestBody ProductDto dto) {
+        return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
-    }
+    public void delete(@PathVariable Long id) { service.delete(id); }
 }

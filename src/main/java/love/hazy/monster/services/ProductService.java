@@ -1,38 +1,48 @@
 package love.hazy.monster.services;
 
+import love.hazy.monster.dtos.product.ProductDto;
+import love.hazy.monster.dtos.product.ProductMapper;
 import love.hazy.monster.models.Product;
 import love.hazy.monster.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepo;
+    private final ProductRepository repo;
+    public ProductService(ProductRepository repo) { this.repo = repo; }
 
-    public List<Product> getAll() {
-        return productRepo.findAll();
+    public List<ProductDto> getAll() {
+        return repo.findAll()
+                .stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Product getById(Long id) {
-        return productRepo.findById(id).orElseThrow();
+    public ProductDto getById(Long id) {
+        Product p = repo.findById(id).orElseThrow();
+        return ProductMapper.toDto(p);
     }
 
-    public Product save(Product p) {
-        return productRepo.save(p);
+    public ProductDto save(ProductDto dto) {
+        Product p = ProductMapper.toEntity(dto);
+        return ProductMapper.toDto(repo.save(p));
     }
 
-    public Product update(Long id, Product updated) {
-        Product p = getById(id);
-        // Update fields manually
-        p.setName(updated.getName());
-        // ... other setters
-        return productRepo.save(p);
+    public ProductDto update(Long id, ProductDto dto) {
+        Product existing = repo.findById(id).orElseThrow();
+        existing.setName(dto.name());
+        existing.setDescription(dto.description());
+        existing.setPrice(dto.price());
+        existing.setImageUrl(dto.imageUrl());
+        existing.setRating(dto.rating());
+        existing.setReviewCount(dto.reviewCount());
+        existing.setFeatured(dto.featured());
+        return ProductMapper.toDto(repo.save(existing));
     }
 
     public void delete(Long id) {
-        productRepo.deleteById(id);
+        repo.deleteById(id);
     }
 }

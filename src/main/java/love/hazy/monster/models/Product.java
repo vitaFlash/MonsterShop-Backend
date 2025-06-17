@@ -12,6 +12,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String description;
     private double price;
     private String imageUrl;
     private double rating;
@@ -21,6 +22,16 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Review> reviews;
+
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
@@ -75,7 +86,7 @@ public class Product {
     }
 
     public void setFeatured(boolean featured) {
-        this.featured = featured;
+        this.featured = this.featured;
     }
 
     public List<Review> getReviews() {
