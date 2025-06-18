@@ -25,8 +25,8 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public ReviewDto save(Long productId, ReviewDto dto) {
-        Product product = productRepo.findById(productId).orElseThrow();
+    public ReviewDto save(/*Long productId,*/ ReviewDto dto) {
+        Product product = productRepo.findById(dto.productId()).orElseThrow();
         Review r = ReviewMapper.toEntity(dto, product);
         return ReviewMapper.toDto(reviewRepo.save(r));
     }

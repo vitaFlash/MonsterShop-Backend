@@ -17,7 +17,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ReviewDto create(@RequestParam Long productId, @RequestBody ReviewDto dto) {
-        return service.save(productId, dto);
+    public ReviewDto create(/* @RequestParam Long productId, */ @RequestBody ReviewDto dto) {
+        return service.save(/*productId,*/ dto);
     }
 }
